@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @Builder
@@ -16,12 +16,12 @@ public class PessoaDTO {
 
     private Long id;
 
-    @NotEmpty (message = "O campo Nome é obrigatório.")
-    @Length (max = 10)
+    @NotBlank(message = "O campo Nome é obrigatório.")
+    @Length (min = 3, max = 50)
     private String nome;
 
-    @NotEmpty(message = "O campo Data de Nascimento é obrigatório.")
-    @Length(min = 8, max = 10)
+    @NotBlank(message = "O campo Data de Nascimento é obrigatório.")
+    @Length(min = 10, max = 10)
     private String dataNascimento;
 
     private Long enderecoPrincipal;

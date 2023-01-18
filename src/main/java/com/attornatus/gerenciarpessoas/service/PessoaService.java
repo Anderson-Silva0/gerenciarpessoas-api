@@ -11,7 +11,7 @@ public interface PessoaService {
 
     Pessoa editarPessoa(PessoaDTO pessoaDTO);
 
-    Optional<Pessoa> consultarPessoa(PessoaDTO pessoaDTO);
+    Optional<Pessoa> consultarPessoa(Long id);
 
     List<Pessoa> listarPessoas();
 }

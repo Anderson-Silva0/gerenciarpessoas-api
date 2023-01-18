@@ -23,12 +23,12 @@ public class Pessoa {
 
     @Column(name = "nome")
     @NotEmpty(message = "O campo Nome é obrigatório.")
-    @Length(max = 10)
+    @Length(min = 3, max = 50)
     private String nome;
 
     @Column(name = "data_nascimento")
     @NotEmpty(message = "O campo Data de Nascimento é obrigatório.")
-    @Length(min = 8, max = 10)
+    @Length(min = 8, max = 150)
     private String dataNascimento;
 
     @Column(name = "endereco_principal")

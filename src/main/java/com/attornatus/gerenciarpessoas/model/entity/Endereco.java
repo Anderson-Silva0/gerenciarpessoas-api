@@ -44,7 +44,7 @@ public class Endereco {
     @ManyToOne
     @JoinColumn(name = "id_pessoa")
     @NotEmpty(message = "O campo id_pessoa é obrigátorio.")
-    private Pessoa id_pessoa;
+    private Pessoa pessoa;
 
     @Column(name = "endereco_principal")
     @Enumerated(EnumType.STRING)

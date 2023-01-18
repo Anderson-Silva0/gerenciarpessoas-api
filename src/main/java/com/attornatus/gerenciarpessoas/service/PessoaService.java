@@ -1,16 +1,17 @@
 package com.attornatus.gerenciarpessoas.service;
 
+import com.attornatus.gerenciarpessoas.api.dto.PessoaDTO;
 import com.attornatus.gerenciarpessoas.model.entity.Pessoa;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface PessoaService {
-    Pessoa criarPessoa(Pessoa pessoa);
+    Pessoa criarPessoa(PessoaDTO pessoaDTO);
 
-    Pessoa editarPessoa(Pessoa pessoa);
+    Pessoa editarPessoa(PessoaDTO pessoaDTO);
 
-    Optional<Pessoa> consultarPessoa(Pessoa pessoa);
+    Optional<Pessoa> consultarPessoa(PessoaDTO pessoaDTO);
 
     List<Pessoa> listarPessoas();
 }

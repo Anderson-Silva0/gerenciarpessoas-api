@@ -1,7 +1,6 @@
 package com.attornatus.gerenciarpessoas.api.dto;
 
 import com.attornatus.gerenciarpessoas.model.entity.Pessoa;
-import com.attornatus.gerenciarpessoas.model.enums.EnderecoPrincipal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,7 +35,7 @@ public class EnderecoDTO {
     @NotBlank(message = "O campo id_pessoa é obrigátorio.")
     private Pessoa pessoa;
 
-    @NotBlank(message = "O campo Principal é obrigátorio.")
+    @NotBlank(message = "O campo isPrincipal é obrigátorio.")
     @Length(min = 3, max = 3)
-    private EnderecoPrincipal principal;
+    private String isPrincipal;
 }

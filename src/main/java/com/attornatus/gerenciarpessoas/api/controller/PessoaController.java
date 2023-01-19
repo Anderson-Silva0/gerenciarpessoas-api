@@ -39,7 +39,7 @@ public class PessoaController {
                 .body(mapper.map(service.consultarPessoa(id).get(), PessoaDTO.class));
     }
     @GetMapping(value = "/listar")
-    public ResponseEntity<List<PessoaDTO>> listaPessoas() {
+    public ResponseEntity<List<PessoaDTO>> listarPessoas() {
         List<PessoaDTO> pessoaDTOS = service.listarPessoas()
                 .stream()
                 .map( x -> mapper.map(x, PessoaDTO.class))

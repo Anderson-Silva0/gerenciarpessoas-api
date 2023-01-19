@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "pessoa", schema = "gerencia")
@@ -22,13 +22,13 @@ public class Pessoa {
     private Long id;
 
     @Column(name = "nome")
-    @NotEmpty(message = "O campo Nome é obrigatório.")
+    @NotBlank(message = "O campo Nome é obrigatório.")
     @Length(min = 3, max = 50)
     private String nome;
 
     @Column(name = "data_nascimento")
-    @NotEmpty(message = "O campo Data de Nascimento é obrigatório.")
-    @Length(min = 8, max = 150)
+    @NotBlank(message = "O campo Data de Nascimento é obrigatório.")
+    @Length(min = 10, max = 10)
     private String dataNascimento;
 
     @Column(name = "endereco_principal")

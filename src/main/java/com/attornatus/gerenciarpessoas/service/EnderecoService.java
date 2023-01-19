@@ -1,15 +1,19 @@
 package com.attornatus.gerenciarpessoas.service;
 
+import com.attornatus.gerenciarpessoas.api.dto.EnderecoDTO;
 import com.attornatus.gerenciarpessoas.model.entity.Endereco;
-import com.attornatus.gerenciarpessoas.model.entity.Pessoa;
 
 import java.util.List;
 
 public interface EnderecoService {
 
-    Endereco criarEnderecoPessoa(Pessoa pessoa, Endereco endereco);
+    Endereco criarEnderecoPessoa(EnderecoDTO enderecoDTO);
 
-    List<Endereco> listarEnderecoPessoa(Pessoa pessoa);
+    List<Endereco> listarEnderecosDaPessoa(Long id);
 
-    void setEnderecoPrincipal();
+    Endereco buscarEnderecoPrincipal(Long idPessoa);
+
+    void deletarEnderecoPrincipal(Long id);
+
+    void setEnderecoPrincipalPessoa(Endereco endereco);
 }

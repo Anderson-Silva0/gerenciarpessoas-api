@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,19 +21,22 @@ public class PessoaController {
     private ModelMapper mapper;
 
     @PostMapping
-    public ResponseEntity<PessoaDTO> criarPessoa(@RequestBody @Valid PessoaDTO pessoaDTO) throws ParseException {
-            return ResponseEntity.ok().body( mapper.map(service.criarPessoa(pessoaDTO), PessoaDTO.class) );
+    public ResponseEntity<PessoaDTO> criarPessoa(@RequestBody @Valid PessoaDTO pessoaDTO) {
+        return ResponseEntity.ok()
+                .body( mapper.map(service.criarPessoa(pessoaDTO), PessoaDTO.class) );
     }
 
     @PostMapping(value = "/{id}")
-    public ResponseEntity<PessoaDTO> editarPessoa(@PathVariable Long id, @RequestBody PessoaDTO pessoaDTO) {
+    public ResponseEntity<PessoaDTO> editarPessoa(@PathVariable("id") Long id, @RequestBody PessoaDTO pessoaDTO) {
         pessoaDTO.setId(id);
-        return ResponseEntity.ok().body( mapper.map(service.editarPessoa(pessoaDTO), PessoaDTO.class) );
+        return ResponseEntity.ok()
+                .body( mapper.map(service.editarPessoa(pessoaDTO), PessoaDTO.class) );
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<PessoaDTO> consultarPessoa(@PathVariable Long id) {
-        return ResponseEntity.ok().body(mapper.map(service.consultarPessoa(id).get(), PessoaDTO.class));
+    public ResponseEntity<PessoaDTO> consultarPessoa(@PathVariable("id") Long id) {
+        return ResponseEntity.ok()
+                .body(mapper.map(service.consultarPessoa(id).get(), PessoaDTO.class));
     }
     @GetMapping(value = "/listar")
     public ResponseEntity<List<PessoaDTO>> listaPessoas() {

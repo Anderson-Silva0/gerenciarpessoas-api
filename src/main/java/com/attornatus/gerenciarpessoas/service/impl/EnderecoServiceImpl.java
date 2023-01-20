@@ -37,7 +37,6 @@ public class EnderecoServiceImpl implements EnderecoService {
     @Override
     public Endereco criarEnderecoPessoa(EnderecoDTO enderecoDTO) {
         Endereco endereco = mapper.map(enderecoDTO, Endereco.class);
-        endereco.setIsPrincipal(EnderecoPrincipal.valueOf( enderecoDTO.getIsPrincipal() ));
         if(endereco.getPessoa().getEnderecoPrincipal() == null
                 || endereco.getIsPrincipal() == EnderecoPrincipal.NAO) {
             return repository.save(endereco);

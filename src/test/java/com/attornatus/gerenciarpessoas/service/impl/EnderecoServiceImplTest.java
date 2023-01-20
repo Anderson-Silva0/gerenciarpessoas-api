@@ -8,6 +8,8 @@ import com.attornatus.gerenciarpessoas.model.enums.EnderecoPrincipal;
 import com.attornatus.gerenciarpessoas.model.repository.EnderecoRepository;
 import com.attornatus.gerenciarpessoas.model.repository.PessoaRepository;
 import com.attornatus.gerenciarpessoas.service.PessoaService;
+import com.attornatus.gerenciarpessoas.service.exception.DataIntegratyViolationException;
+import com.attornatus.gerenciarpessoas.service.exception.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,7 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -70,6 +73,26 @@ class EnderecoServiceImplTest {
     }
 
     @Test
+    void deveRetornarErroAoTentarCriarUmEndereco() {
+        Endereco endereco = criarEndereco();
+        endereco.setId(null);
+
+        EnderecoDTO enderecoDTO = criarEnderecoDTO();
+        enderecoDTO.setId(null);
+
+        Mockito.when(mapper.map(Mockito.any(), Mockito.any())).thenReturn(endereco);
+        Mockito.when(enderecoRepository.save(endereco)).thenReturn(criarEndereco());
+
+        try {
+            Endereco response = enderecoService.criarEnderecoPessoa(enderecoDTO);
+        }catch (Exception e) {
+            Assertions.assertEquals(DataIntegratyViolationException.class, e.getClass());
+            Assertions.assertEquals("Essa pessoa já possui um endereço principal. " +
+                    "Para cadastrar um novo endereço principal delete o antigo.", e.getMessage());
+        }
+    }
+
+    @Test
     void deveBuscarEnderecoPrincipalPorIdDaPessoaERetornarUmEndereco() {
         Endereco endereco1 = criarEndereco();
         endereco1.setIsPrincipal(EnderecoPrincipal.NAO);
@@ -88,6 +111,26 @@ class EnderecoServiceImplTest {
         Assertions.assertEquals(EnderecoPrincipal.SIM, response.getIsPrincipal());
         Assertions.assertEquals(endereco2.getPessoa(), response.getPessoa());
         Assertions.assertNotEquals(endereco1, response);
+    }
+
+    @Test
+    void deveLancarErroAoTentarBuscarEnderecoPrincipalPorIdDaPessoa() {
+        Endereco endereco1 = criarEndereco();
+        endereco1.setIsPrincipal(EnderecoPrincipal.NAO);
+        Endereco endereco2 = criarEndereco();
+        endereco2.setIsPrincipal(EnderecoPrincipal.SIM);
+
+        Mockito.when(mapper.map(Mockito.any(), Mockito.any())).thenReturn(null);
+        Mockito.when(pessoaRepository.existsById(Mockito.anyLong())).thenReturn(true);
+        Mockito.when(enderecoRepository.buscarTodosEnderecosPorIdPessoa(Mockito.anyLong()))
+                .thenReturn(List.of(endereco1, endereco2));
+
+        try {
+            Endereco response = enderecoService.buscarEnderecoPrincipal(1l);
+        }catch (Exception e) {
+            Assertions.assertEquals(ObjectNotFoundException.class, e.getClass());
+            Assertions.assertEquals("A Pessoa não possui um Endereço Principal.", e.getMessage());
+        }
     }
 
     @Test
@@ -115,6 +158,27 @@ class EnderecoServiceImplTest {
     }
 
     @Test
+    void deveLancarErroAoTentarListarTodosEnderecosDaPessoaPorId() {
+        Pessoa pessoa = criarPessoa();
+        Endereco endereco1 = criarEndereco();
+        endereco1.setIsPrincipal(EnderecoPrincipal.NAO);
+        Endereco endereco2 = criarEndereco();
+        endereco2.setIsPrincipal(EnderecoPrincipal.SIM);
+
+        Mockito.when(enderecoRepository.buscarTodosEnderecosPorIdPessoa(Mockito.anyLong()))
+                .thenReturn(List.of(endereco1, endereco2));
+
+        Mockito.when(pessoaRepository.existsById(Mockito.anyLong())).thenReturn(false);
+
+        try {
+            List<Endereco> responses = enderecoService.listarEnderecosDaPessoa(pessoa.getId());
+        }catch (Exception e) {
+            Assertions.assertEquals(ObjectNotFoundException.class, e.getClass());
+            Assertions.assertEquals("Pessoa não encontrada para o Id informado.", e.getMessage());
+        }
+    }
+
+    @Test
     void deveDeletarOEnderecoPrincipal() {
         Mockito.when(pessoaRepository.existsById(Mockito.anyLong())).thenReturn(true);
         Mockito.when(enderecoRepository.buscarTodosEnderecosPorIdPessoa(Mockito.anyLong()))
@@ -130,8 +194,42 @@ class EnderecoServiceImplTest {
     }
 
     @Test
+    void deveLancarErroAoTentarDeletarUmaPessoaQueNaoPossuiNenhumEnderecoCadastrado() {
+        Mockito.when(pessoaRepository.existsById(Mockito.anyLong())).thenReturn(true);
+        Mockito.when(enderecoRepository.buscarTodosEnderecosPorIdPessoa(Mockito.anyLong()))
+                .thenReturn(new ArrayList<>());
+        Mockito.doNothing().when(enderecoRepository).deleteById(Mockito.anyLong());
+
+        try {
+            enderecoService.deletarEnderecoPrincipal(1l);
+        }catch (Exception e) {
+            Assertions.assertEquals(ObjectNotFoundException.class, e.getClass());
+            Assertions.assertEquals("Erro ao tentar Deletar. " +
+                    "Essa Pessoa não possui nenhum endereço.", e.getMessage());
+        }
+    }
+
+    @Test
+    void deveLancarErroAoTentarDeletarUmaPessoaQueNaoPossuiEnderecoPrincipalCadastrado() {
+        Endereco endereco = criarEndereco();
+        endereco.setIsPrincipal(EnderecoPrincipal.NAO);
+        Mockito.when(pessoaRepository.existsById(Mockito.anyLong())).thenReturn(true);
+        Mockito.when(enderecoRepository.buscarTodosEnderecosPorIdPessoa(Mockito.anyLong()))
+                .thenReturn(List.of(endereco));
+        Mockito.doNothing().when(enderecoRepository).deleteById(Mockito.anyLong());
+
+        try {
+            enderecoService.deletarEnderecoPrincipal(1l);
+        }catch (Exception e) {
+            Assertions.assertEquals(ObjectNotFoundException.class, e.getClass());
+            Assertions.assertEquals("Erro ao tentar Deletar. " +
+                    "Essa Pessoa não possui Endereço Principal.", e.getMessage());
+        }
+    }
+
+    @Test
     void deveSalvarUmIdDeUmEnderecoPrincipalNaEntidadePessoa() {
-        Mockito.when(mapper.map(Mockito.any(), Mockito.any())).thenReturn(criarPessoaDTO()git);
+        Mockito.when(mapper.map(Mockito.any(), Mockito.any())).thenReturn(criarPessoaDTO());
 
         enderecoService.setEnderecoPrincipalPessoa(criarEndereco());
 

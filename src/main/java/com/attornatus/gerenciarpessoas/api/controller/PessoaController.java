@@ -21,13 +21,13 @@ public class PessoaController {
     private ModelMapper mapper;
 
     @PostMapping
-    public ResponseEntity<PessoaDTO> criarPessoa(@RequestBody @Valid PessoaDTO pessoaDTO) {
+    public ResponseEntity<PessoaDTO> criarPessoa(@Valid @RequestBody PessoaDTO pessoaDTO) {
         return ResponseEntity.ok()
                 .body( mapper.map(service.criarPessoa(pessoaDTO), PessoaDTO.class) );
     }
 
     @PostMapping(value = "/{id}")
-    public ResponseEntity<PessoaDTO> editarPessoa(@PathVariable("id") Long id, @RequestBody PessoaDTO pessoaDTO) {
+    public ResponseEntity<PessoaDTO> editarPessoa(@Valid @PathVariable("id") Long id, @RequestBody PessoaDTO pessoaDTO) {
         pessoaDTO.setId(id);
         return ResponseEntity.ok()
                 .body( mapper.map(service.editarPessoa(pessoaDTO), PessoaDTO.class) );

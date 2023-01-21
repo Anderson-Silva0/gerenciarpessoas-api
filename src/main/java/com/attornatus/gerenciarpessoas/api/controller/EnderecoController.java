@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,7 +29,7 @@ public class EnderecoController {
     private ModelMapper mapper;
 
     @PostMapping("/{id}")
-    public ResponseEntity<EnderecoDTO> criarEndereco(@PathVariable("id") Long id, @RequestBody EnderecoDTO enderecoDTO) {
+    public ResponseEntity<EnderecoDTO> criarEndereco(@Valid @PathVariable("id") Long id, @RequestBody EnderecoDTO enderecoDTO) {
         Optional<Pessoa> pessoa = pessoaService.consultarPessoa(id);
         enderecoDTO.setPessoa(pessoa.get());
         Endereco endereco = service.criarEnderecoPessoa(enderecoDTO);

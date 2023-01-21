@@ -1,5 +1,6 @@
 package com.attornatus.gerenciarpessoas.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,5 +25,6 @@ public class PessoaDTO {
     @Length(min = 10, max = 10)
     private String dataNascimento;
 
+    @JsonIgnore
     private Long enderecoPrincipal;
 }

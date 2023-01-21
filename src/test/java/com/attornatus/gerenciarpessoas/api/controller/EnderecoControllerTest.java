@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,7 +63,7 @@ class EnderecoControllerTest {
     @Test
     void deveRetornarUmaListaDeEnderecosPorIdDaPessoa() {
         Mockito.when(enderecoService.listarEnderecosDaPessoa(Mockito.anyLong()))
-                .thenReturn(List.of(criarEndereco()));
+                .thenReturn(Arrays.asList(criarEndereco()));
         Mockito.when(mapper.map(Mockito.any(), Mockito.any())).thenReturn(criarEnderecoDTO());
 
         ResponseEntity<List<EnderecoDTO>> listResponse = enderecoController.listarEnderecosPessoa(1l);

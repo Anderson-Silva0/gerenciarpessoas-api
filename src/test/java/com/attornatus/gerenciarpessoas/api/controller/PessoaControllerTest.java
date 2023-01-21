@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,7 +86,7 @@ class PessoaControllerTest {
 
     @Test
     void deveRetornarUmaListaDePessoaDTOComStatusOk() {
-        Mockito.when(pessoaService.listarPessoas()).thenReturn(List.of(criarPessoa()));
+        Mockito.when(pessoaService.listarPessoas()).thenReturn(Arrays.asList(criarPessoa()));
         Mockito.when(mapper.map(Mockito.any(), Mockito.any())).thenReturn(criarPessoaDTO());
 
         ResponseEntity<List<PessoaDTO>> listResponse = pessoaController.listarPessoas();

@@ -21,6 +21,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
@@ -102,7 +103,7 @@ class EnderecoServiceImplTest {
         Mockito.when(mapper.map(Mockito.any(), Mockito.any())).thenReturn(endereco2);
         Mockito.when(pessoaRepository.existsById(Mockito.anyLong())).thenReturn(true);
         Mockito.when(enderecoRepository.buscarTodosEnderecosPorIdPessoa(Mockito.anyLong()))
-                .thenReturn(List.of(endereco1, endereco2));
+                .thenReturn(Arrays.asList(endereco1, endereco2));
 
         Endereco response = enderecoService.buscarEnderecoPrincipal(1l);
 
@@ -123,7 +124,7 @@ class EnderecoServiceImplTest {
         Mockito.when(mapper.map(Mockito.any(), Mockito.any())).thenReturn(null);
         Mockito.when(pessoaRepository.existsById(Mockito.anyLong())).thenReturn(true);
         Mockito.when(enderecoRepository.buscarTodosEnderecosPorIdPessoa(Mockito.anyLong()))
-                .thenReturn(List.of(endereco1, endereco2));
+                .thenReturn(Arrays.asList(endereco1, endereco2));
 
         try {
             Endereco response = enderecoService.buscarEnderecoPrincipal(1l);
@@ -142,7 +143,7 @@ class EnderecoServiceImplTest {
         endereco2.setIsPrincipal(EnderecoPrincipal.SIM);
 
         Mockito.when(enderecoRepository.buscarTodosEnderecosPorIdPessoa(Mockito.anyLong()))
-                .thenReturn(List.of(endereco1, endereco2));
+                .thenReturn(Arrays.asList(endereco1, endereco2));
 
         Mockito.when(pessoaRepository.existsById(Mockito.anyLong())).thenReturn(true);
 
@@ -166,7 +167,7 @@ class EnderecoServiceImplTest {
         endereco2.setIsPrincipal(EnderecoPrincipal.SIM);
 
         Mockito.when(enderecoRepository.buscarTodosEnderecosPorIdPessoa(Mockito.anyLong()))
-                .thenReturn(List.of(endereco1, endereco2));
+                .thenReturn(Arrays.asList(endereco1, endereco2));
 
         Mockito.when(pessoaRepository.existsById(Mockito.anyLong())).thenReturn(false);
 
@@ -182,7 +183,7 @@ class EnderecoServiceImplTest {
     void deveDeletarOEnderecoPrincipal() {
         Mockito.when(pessoaRepository.existsById(Mockito.anyLong())).thenReturn(true);
         Mockito.when(enderecoRepository.buscarTodosEnderecosPorIdPessoa(Mockito.anyLong()))
-                .thenReturn(List.of(criarEndereco()));
+                .thenReturn(Arrays.asList(criarEndereco()));
         Mockito.doNothing().when(enderecoRepository).deleteById(Mockito.anyLong());
 
         enderecoService.deletarEnderecoPrincipal(1l);
@@ -215,7 +216,7 @@ class EnderecoServiceImplTest {
         endereco.setIsPrincipal(EnderecoPrincipal.NAO);
         Mockito.when(pessoaRepository.existsById(Mockito.anyLong())).thenReturn(true);
         Mockito.when(enderecoRepository.buscarTodosEnderecosPorIdPessoa(Mockito.anyLong()))
-                .thenReturn(List.of(endereco));
+                .thenReturn(Arrays.asList(endereco));
         Mockito.doNothing().when(enderecoRepository).deleteById(Mockito.anyLong());
 
         try {

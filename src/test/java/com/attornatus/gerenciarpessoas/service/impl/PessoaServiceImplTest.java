@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -136,7 +137,7 @@ class PessoaServiceImplTest {
     @Test
     void deveListarPessoas() {
         Pessoa pessoa = criarPessoa();
-        Mockito.when(pessoaRepository.findAll()).thenReturn(List.of(pessoa));
+        Mockito.when(pessoaRepository.findAll()).thenReturn(Arrays.asList(pessoa));
 
         List<Pessoa> response = pessoaService.listarPessoas();
 
